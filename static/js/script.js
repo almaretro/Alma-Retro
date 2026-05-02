@@ -249,7 +249,25 @@ async function openProductModal(productId) {
     const modalThumbnails = document.getElementById('modal-thumbnails');
 
     // Handle images (support for multiple images)
-    const images = product.images || [product.image_url];
+    let images = [];
+    if (product.images) {
+        // Parse if it's a string, otherwise use as array
+        if (typeof product.images === 'string') {
+            try {
+                images = JSON.parse(product.images);
+            } catch (e) {
+                images = [product.images];
+            }
+        } else {
+            images = product.images;
+        }
+    }
+
+    // Fallback to image_url if no images
+    if (!images || images.length === 0) {
+        images = [product.image_url];
+    }
+
     if (modalImage) {
         modalImage.src = images[0];
         modalImage.alt = product.name;
@@ -485,7 +503,7 @@ function setupImageLoading() {
         });
 
         img.addEventListener('error', function () {
-            this.src = 'https://via.placeholder.com/300x400?text=Imagem+não+disponível';
+            this.style.display = 'none';
         });
     });
 }

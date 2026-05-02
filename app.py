@@ -120,6 +120,8 @@ def create_product():
 
     try:
         data = request.get_json()
+        print(f"[DEBUG] Dados recebidos para criar produto: {data}")
+        print(f"[DEBUG] Chaves em data: {data.keys()}")
 
         # Se este produto está sendo marcado como featured, remover featured de todos os outros
         if data.get('featured'):
@@ -144,6 +146,7 @@ def update_product(product_id):
 
     try:
         data = request.get_json()
+        print(f"[DEBUG] Dados recebidos para atualizar produto {product_id}: {data}")
 
         # Se este produto está sendo marcado como featured, remover featured de todos os outros
         if data.get('featured'):
@@ -333,4 +336,4 @@ def upload_image():
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)

@@ -53,8 +53,25 @@ function openEditModal(productId) {
             productPriceInput.value = product.price;
             productSizeInput.value = product.size || '';
 
-            // Handle images (support both single image_url and multiple images)
-            const images = product.images || [product.image_url];
+            // Handle images (parse string JSON if needed)
+            let images = [];
+            if (product.images) {
+                if (typeof product.images === 'string') {
+                    try {
+                        images = JSON.parse(product.images);
+                    } catch (e) {
+                        images = [product.images];
+                    }
+                } else {
+                    images = product.images;
+                }
+            }
+
+            // Fallback to image_url if no images
+            if (!images || images.length === 0) {
+                images = [product.image_url];
+            }
+
             uploadedImageUrls = images;
             productImagesUrlsInput.value = JSON.stringify(images);
 
@@ -306,14 +323,18 @@ async function saveProduct() {
         featured: productFeaturedInput.checked
     };
 
-    // Handle images - use uploaded URLs or keep existing
+    // Handle images - save all URLs in 'images' column and first in 'image_url'
     if (uploadedImageUrls.length > 0) {
         productData.images = uploadedImageUrls;
-        productData.image_url = uploadedImageUrls[0]; // Keep compatibility
+        productData.image_url = uploadedImageUrls[0];
     } else if (productImagesUrlsInput.value) {
-        productData.images = JSON.parse(productImagesUrlsInput.value);
-        productData.image_url = productData.images[0];
+        const urls = JSON.parse(productImagesUrlsInput.value);
+        productData.images = urls;
+        productData.image_url = urls[0];
     }
+
+    console.log('[DEBUG] Dados a serem enviados:', productData);
+    console.log('[DEBUG] uploadedImageUrls:', uploadedImageUrls);
 
     const url = currentProductId
         ? `/admin/products/${currentProductId}`
