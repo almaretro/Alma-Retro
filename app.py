@@ -3,6 +3,8 @@ from supabase import create_client, Client
 import os
 from dotenv import load_dotenv
 import uuid
+import json
+import re
 from werkzeug.utils import secure_filename
 
 # Carregar variáveis de ambiente
@@ -164,13 +166,54 @@ def update_product(product_id):
 
 @app.route('/admin/products/<int:product_id>', methods=['DELETE'])
 def delete_product(product_id):
-    """Remover produto"""
+    """Remover produto e suas imagens do bucket"""
     if not session.get('logged_in'):
         return jsonify({'error': 'Não autorizado'}), 401
 
     try:
+        # Buscar produto para obter as imagens
+        product_response = supabase_admin.table('products').select('*').eq('id', product_id).execute()
+        if not product_response.data:
+            return jsonify({'error': 'Produto não encontrado'}), 404
+
+        product = product_response.data[0]
+        print(f"[DEBUG] Produto encontrado para exclusão: {product}")
+
+        # Extrair URLs das imagens (image_url e images)
+        image_urls = []
+        if product.get('image_url'):
+            image_urls.append(product['image_url'])
+
+        # Se tiver coluna images, extrair todas
+        if product.get('images'):
+            if isinstance(product['images'], str):
+                try:
+                    import json
+                    extra_urls = json.loads(product['images'])
+                    image_urls.extend(extra_urls)
+                except:
+                    image_urls.append(product['images'])
+            elif isinstance(product['images'], list):
+                image_urls.extend(product['images'])
+
+        print(f"[DEBUG] Imagens para excluir: {image_urls}")
+
+        # Extrair nomes dos arquivos das URLs e excluir do bucket
+        for url in image_urls:
+            # Extrair o nome do arquivo da URL (última parte após /)
+            match = re.search(r'/([^/]+)$', url)
+            if match:
+                filename = match.group(1)
+                try:
+                    supabase_admin.storage.from_(BUCKET_NAME).remove([filename])
+                    print(f"[DEBUG] Imagem excluída do bucket: {filename}")
+                except Exception as img_error:
+                    print(f"[DEBUG] Erro ao excluir imagem {filename}: {img_error}")
+                    # Continua mesmo se falhar a exclusão da imagem
+
+        # Deletar produto do banco
         response = supabase_admin.table('products').delete().eq('id', product_id).execute()
-        print(f"[DEBUG] Produto removido: {product_id}")
+        print(f"[DEBUG] Produto removido do banco: {product_id}")
 
         return jsonify({'success': True})
     except Exception as e:
