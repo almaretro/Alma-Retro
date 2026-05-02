@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Catálogo - Alma Retrô{% endblock %}
+
+{% block content %}
+<!-- Catalog Header -->
+<section class="catalog-header">
+    <div class="container">
+        <h1 class="catalog-title">Catálogo Completo</h1>
+        <p class="catalog-subtitle">Explore todas as peças exclusivas do Alma Retrô</p>
+    </div>
+</section>
+
+<!-- Products Grid -->
+<section class="catalog-section">
+    <div class="container">
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card" data-product-id="{{ product.id }}">
+                <div class="product-image">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <p class="product-price">R$ {{ "%.2f"|format(product.price) }}</p>
+                    <button class="btn btn-secondary view-product" data-product-id="{{ product.id }}">
+                        Ver mais
+                    </button>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-products">Nenhum produto disponível no momento.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

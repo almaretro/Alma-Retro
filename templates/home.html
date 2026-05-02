@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Alma Retrô - Peças com História{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-grid">
+            <div class="hero-content">
+                <h1>
+                    peças com <span class="highlight">história</span>,<br>
+                    Nada aqui é só roupa.
+                </h1>
+                <p>um brechó pensado para quem acredita que estilo e consciência caminham juntos.</p>
+                <a href="/catalogo" class="btn btn-primary">ver catálogo</a>
+            </div>
+            <!-- Peça em Destaque -->
+            <div class="hero-featured">
+                {% if featured_product %}
+                <div class="featured-card" data-product-id="{{ featured_product.id }}">
+                    <div class="featured-badge">peça em destaque</div>
+                    <div class="featured-image">
+                        <img src="{{ featured_product.image_url }}" alt="{{ featured_product.name }}">
+                        <button class="featured-favorite" data-product-id="{{ featured_product.id }}">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="featured-info">
+                        <h3>{{ featured_product.name }}</h3>
+                        <p class="featured-price">R$ {{ "%.2f"|format(featured_product.price) }}</p>
+                        <button class="btn btn-reserve-featured">reservar</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="featured-placeholder">
+                    <div class="placeholder-icon">
+                        <svg viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M30 20 L50 5 L70 20 L70 35 L65 35 L65 110 L35 110 L35 35 L30 35 Z"
+                                stroke="currentColor" stroke-width="2" fill="none" />
+                            <path d="M35 35 L50 45 L65 35" stroke="currentColor" stroke-width="2" fill="none" />
+                            <path d="M45 5 L50 0 L55 5" stroke="currentColor" stroke-width="2" fill="none" />
+                            <circle cx="50" cy="0" r="3" stroke="currentColor" stroke-width="2" fill="none" />
+                        </svg>
+                    </div>
+                    <p>peça em destaque em breve</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <h3>peças únicas com curadoria</h3>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    </svg>
+                </div>
+                <h3>envio para todo o brasil</h3>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                </div>
+                <h3>até 6x sem juros no cartão</h3>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-3.6 9-10 9Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                    </svg>
+                </div>
+                <h3>moda sustentável com propósito</h3>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Novidades Section -->
+<section class="novidades-section" id="novidades">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">novidades</h2>
+            <a href="/catalogo" class="view-all">ver tudo</a>
+        </div>
+        <!-- DEBUG: {{ products|length }} produtos carregados -->
+        <div class="products-grid">
+            {% for product in products %}
+            <div class="product-card" data-product-id="{{ product.id }}">
+                <div class="product-image">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    <button class="favorite-btn" data-product-id="{{ product.id }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <p class="product-price">R$ {{ "%.2f"|format(product.price) }}</p>
+                    <button class="btn btn-reserve-product" data-product-id="{{ product.id }}">reservar</button>
+                </div>
+            </div>
+            {% else %}
+            <p class="no-products">Nenhuma peça disponível no momento.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Sobre Section -->
+<section class="sobre-section" id="sobre">
+    <div class="container">
+        <div class="sobre-content">
+            <h2 class="section-title">sobre a alma retro</h2>
+            <p>somos um brechó online que acredita na moda circular. cada peça é selecionada com cuidado, higienizada e
+                pronta para ganhar uma nova história.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Como Comprar Section -->
+<section class="como-comprar-section" id="como-comprar">
+    <div class="container">
+        <h2 class="section-title">como comprar</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <span class="step-number">1</span>
+                <h3>escolha sua peça</h3>
+                <p>navegue pelo catálogo e escolha suas peças favoritas</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">2</span>
+                <h3>reserve</h3>
+                <p>clique em "reservar" para enviar suas escolhas pelo whatsapp</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">3</span>
+                <h3>finalize</h3>
+                <p>combinamos o pagamento e envio direto pelo whatsapp</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
